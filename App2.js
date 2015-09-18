@@ -98,7 +98,7 @@ Ext.define('CustomApp', {
     			this._loadPiBurnup();
     			break;
        		case "PC":
-    			console.log("Loading project cumulative flow ..");
+    			console.log("Loading project cumulative flows ..");
     			this._loadProjectCumulative();
     			break;
     		default:
