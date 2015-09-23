@@ -135,7 +135,7 @@ Ext.define('CustomApp', {
     	            label: {
     	                renderer: Ext.util.Format.numberRenderer('0,0')
     	            },
-    	            title: 'Sample Val',
+    	            title: 'Sample Values',
     	            grid: true,
     	            minimum: 0
     	        },
@@ -143,7 +143,7 @@ Ext.define('CustomApp', {
     	            type: 'Category',
     	            position: 'bottom',
     	            fields: ['name'],
-    	            title: 'Sample Met'
+    	            title: 'Sample Metriccs'
     	        }
     	    ],
     	    series: [
