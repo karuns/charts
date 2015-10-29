@@ -110,7 +110,7 @@ Ext.define('CustomApp', {
     			break;
        		case "JT":
        			console.log("Loading Jerry the thief");
-       			console._loadJerryTheThief();
+       			this._loadJerryTheThief();
     		default:
     			console.log("Loading Burndown chart ");
     	}
