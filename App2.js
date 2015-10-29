@@ -16,6 +16,12 @@ Ext.define('CustomApp', {
               align: 'stretch'
           },
           width: 400,
+          border: 5,
+          style: {borderColor:'#800000 ', borderStyle:'solid', borderWidth:'10px', color: 'yellow',backgroundColor:'#A8A8A8'},
+//          html: 'Hello world!',
+//          height: 200,
+//          padding: 20,
+//          renderTo: Ext.getBody()
       });
       
       this.add(this.pulldownContainer);
@@ -31,7 +37,8 @@ Ext.define('CustomApp', {
     		        {"abbr":"BC", "name":"Burndown Chart"},
     		        {"abbr":"DT", "name":"Defect Trend"},  
     		        {"abbr":"PB", "name":"PI Burnup"},  
-    		        {"abbr":"PC", "name":"Project Cumulative Flow"},  
+    		        {"abbr":"PC", "name":"Project Cumulative Flow"},
+    		        {"abbr":"TC", "name":"Jerry the thief"},
     		    ]
     	});
     	
@@ -131,7 +138,7 @@ Ext.define('CustomApp', {
     	        {
     	            type: 'Numeric',
     	            position: 'left',
-    	            fields: ['data1', 'data2'],
+    	            fields: ['data1', 'data2','data3'],
     	            label: {
     	                renderer: Ext.util.Format.numberRenderer('0,0')
     	            },
@@ -151,7 +158,7 @@ Ext.define('CustomApp', {
     	            type: 'line',
     	            highlight: {
     	                size: 7,
-    	                radius: 7
+    	                radius: 7,
     	            },
     	            axis: 'left',
     	            xField: 'name',
@@ -173,6 +180,23 @@ Ext.define('CustomApp', {
     	            fill: true,
     	            xField: 'name',
     	            yField: 'data2',
+    	            markerConfig: {
+    	                type: 'circle',
+    	                size: 4,
+    	                radius: 4,
+    	                'stroke-width': 0
+    	            }
+    	        },
+    	        {
+    	            type: 'line',
+    	            highlight: {
+    	                size: 7,
+    	                radius: 7
+    	            },
+    	            axis: 'left',
+    	            fill: true,
+    	            xField: 'name',
+    	            yField: 'data3',
     	            markerConfig: {
     	                type: 'circle',
     	                size: 4,
