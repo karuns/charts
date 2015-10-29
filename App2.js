@@ -111,6 +111,7 @@ Ext.define('CustomApp', {
        		case "JT":
        			console.log("Loading Jerry the thief");
        			this._loadJerryTheThief();
+       			break;
     		default:
     			console.log("Loading Burndown chart ");
     	}
@@ -236,6 +237,7 @@ Ext.define('CustomApp', {
     },
     
     _getStoreForJerry: function() {
+    	console.log("starting store");
         return {
             find: {
                 _TypeHierarchy: { '$in' : [ 'Defect' ] },
@@ -249,11 +251,12 @@ Ext.define('CustomApp', {
                 _ValidFrom: 1
             },
             context: this.getContext().getDataContext(),
-            limit: Infinity
+            limit: Infinity,
         };
     },
     
     _getJerryChartConfig: function() {
+    	console.log("starting chart config");
         return {
             chart: {
                 zoomType: 'xy'
