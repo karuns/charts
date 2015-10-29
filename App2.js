@@ -38,7 +38,7 @@ Ext.define('CustomApp', {
     		        {"abbr":"DT", "name":"Defect Trend"},  
     		        {"abbr":"PB", "name":"PI Burnup"},  
     		        {"abbr":"PC", "name":"Project Cumulative Flow"},
-    		        {"abbr":"TC", "name":"Jerry the thief"},
+    		        {"abbr":"JT", "name":"Jerry the thief"},
     		    ]
     	});
     	
@@ -108,11 +108,16 @@ Ext.define('CustomApp', {
     			console.log("Loading project cumulative flows ..");
     			this._loadProjectCumulative();
     			break;
+       		case "JT":
+       			console.log("Loading Jerry the thief");
+       			console._loadJerryTheThief();
     		default:
     			console.log("Loading Burndown chart ");
     	}
     },
     
+    
+ 
     
     /* Load Defect Trernd */
     _loadDefectTrend : function() {
@@ -210,6 +215,77 @@ Ext.define('CustomApp', {
     	this.chartContainer.add(this.chart);
     },
     
+    /*
+     * Load Jerry's theft trend
+     * */
+    _loadJerryTheThief: function() {
+    	this.chart = { 
+    			xtype: 'rallychart',
+    			storeType: 'Rally.data.lookback.SnapshotStore',
+    			storeConfig: this._getStoreForJerry(),
+    			calculatorType: 'Rally.example.myCalculator',
+    			calculatorConfig: {
+    				stateFieldName: 'Project',
+    				stateFieldValues: ['FE','BE','VisualRF']
+    			},
+                width: 1000,
+                height: 600,
+                chartConfig: this._getJerryChartConfig()
+            };
+    },
+    
+    _getStoreForJerry: function() {
+        return {
+            find: {
+                _TypeHierarchy: { '$in' : [ 'Defect' ] },
+                Children: null,
+                _ProjectHierarchy: this.getContext().getProject().ObjectID,
+                _ValidFrom: {'$gt': Rally.util.DateTime.toIsoString(Rally.util.DateTime.add(new Date(), 'day', -120)) }
+            },
+            fetch: ['Project'],
+            hydrate: ['Project'],
+            sort: {
+                _ValidFrom: 1
+            },
+            context: this.getContext().getDataContext(),
+            limit: Infinity
+        };
+    },
+    
+    _getJerryChartConfig: function() {
+        return {
+            chart: {
+                zoomType: 'xy'
+            },
+            title: {
+                text: 'Jerry the Thief'
+            },
+            xAxis: {
+                tickmarkPlacement: 'on',
+                tickInterval: 20,
+                title: {
+                    text: 'Date'
+                }
+            },
+            yAxis: [
+                {
+                    title: {
+                        text: 'Count'
+                    }
+                }
+            ],
+            plotOptions: {
+                series: {
+                    marker: {
+                        enabled: false
+                    }
+                },
+                area: {
+                    stacking: 'normal'
+                }
+            }
+        };
+    }
     
     /* Load Defect Trernd */
     _loadProjectCumulative : function() {	
