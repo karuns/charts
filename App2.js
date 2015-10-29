@@ -215,6 +215,7 @@ Ext.define('CustomApp', {
     	this.chartContainer.add(this.chart);
     },
     
+    
     /*
      * Load Jerry's theft trend
      * */
@@ -258,7 +259,7 @@ Ext.define('CustomApp', {
                 zoomType: 'xy'
             },
             title: {
-                text: 'Jerry the Thief'
+                text: 'Project Cumulative Flow'
             },
             xAxis: {
                 tickmarkPlacement: 'on',
@@ -285,7 +286,7 @@ Ext.define('CustomApp', {
                 }
             }
         };
-    }
+    },
     
     /* Load Defect Trernd */
     _loadProjectCumulative : function() {	
