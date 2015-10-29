@@ -234,8 +234,8 @@ Ext.define('CustomApp', {
                 height: 600,
                 chartConfig: this._getJerryChartConfig()
             };
-    	console.log("store: "+storeConfig);
-    	console.log("chart: "+chartConfig);
+    	console.log("store: "+this.storeConfig);
+    	console.log("chart: "+this.chartConfig);
     	
     },
     
