@@ -123,7 +123,7 @@ Ext.define('CustomApp', {
     },
     
     _standardReport: function() {
-    	this.add({
+    	this.chartContainer.add({
     				xtype:'rallystandardreport',
                     project: Rally.util.Ref.getRelativeUri(this.getContext().getProject()),
                     projectScopeUp: this.getContext().getProjectScopeUp(),
