@@ -16,10 +16,6 @@ Ext.define('CustomApp', {
           width: 400,
           border: 5,
           style: {borderColor:'#800000 ', borderStyle:'solid', borderWidth:'10px', color: 'yellow',backgroundColor:'#A8A8A8'},
-//          html: 'Hello world!',
-//          height: 200,
-//          padding: 20,
-//          renderTo: Ext.getBody()
       });
       
       this.add(this.pulldownContainer);
@@ -36,8 +32,9 @@ Ext.define('CustomApp', {
     		        {"abbr":"DT", "name":"Defect Trend"},  
     		        {"abbr":"PB", "name":"PI Burnup"},  
     		        {"abbr":"PC", "name":"Project Cumulative Flow"},
-    		        {"abbr":"P1", "name":"Project1"},
-    		        {"abbr":"P2","name":"Project2"}
+    		        {"abbr":"P1", "name":"Open Defects"},
+    		        {"abbr":"P2", "name":"Project2"},
+    		        {"abbr":"SR", "name":"Standard Report"},
     		    ]
     	});
     	
@@ -83,13 +80,12 @@ Ext.define('CustomApp', {
     	}
     	this.chartContainer = null;
     },
+       
     
     /* Load High charts */
     _loadHighChart : function(chartType) {       
     	this._removeChartContainer();
- 
     	this._createChartContainer();
-    	
     	switch(chartType) {
     		case "BC": 
     			console.log("Loading Burndown chart ");
@@ -108,21 +104,129 @@ Ext.define('CustomApp', {
     			this._loadProjectCumulative();
     			break;
        		case "P1":
-       			console.log("Loading chart1");
-       			this._chart1();
+       			console.log("Loading Open Defects chart");
+       			this._openDefect();
+       			console.log("Loading release chartsss");
+       			this._releaseContainer();
        			break;
        		case "P2":
        			console.log("Loading chart2");
        			this._chart2();
+       			break;
+       		case "SR":
+       			console.log("Loading the Standard Report");
+       			this._standardReport();
+       			break;
     		default:
     			console.log("Loading Burndown chart ");
     	}
     },
     
+    _standardReport: function() {
+    	this.add({
+    				xtype:'rallystandardreport',
+                    project: Rally.util.Ref.getRelativeUri(this.getContext().getProject()),
+                    projectScopeUp: this.getContext().getProjectScopeUp(),
+                    projectScopeDown: this.getContext().getProjectScopeDown(),
+                    width: 600,
+                    height: 400,
+                    reportConfig: {
+                        report: Rally.ui.report.StandardReport.Reports.Throughput,
+                        work_items: 'G,D',
+                        filter_field: 'ScheduleState',
+                        from_state: 'Accepted',
+                        to_state: 'Accepted'
+                    }
+    	});
+    },
+       
+    _releaseContainer: function () {
+    	this.relContainer = Ext.create('Ext.Container', {
+        items: [{
+            xtype: 'rallyreleasecombobox',
+        }],
+        renderTo: Ext.getBody().dom,
+	    listeners: {
+            ready: this._loadReleaseChart(this.relContainer.getValue()),
+            select: this._loadReleaseChart(this.relContainer.getValue()),
+            scope: this
+        }
+    	});
+    	//console.log(this.relContainer.getValue());
+    	this.chartContainer.add(this.relContainer);
+    	
+    },
     
+    /* Release based Charts */
+    _loadReleaseChart : function(release) {    
+    	console.log("Inside loadReleaseChart");
+    	this._removeChartContainer();
+    	this._createChartContainer();
+    	switch(release) {
+    		case "8.1": 
+       			this._openReleaseDefect();
+    			break;
+    		case "8.2":
+       			this._openReleaseDefect();
+    			break;
+    		case "8.3":
+       			this._openReleaseDefect();
+    			break;
+    		default:
+    			console.log("Loading nothing..");
+    	}
+    },
+    
+    /*
+     * Load release trend
+     * 
+     */
+    _openReleaseDefect: function() {
+    	this.chart = {
+                xtype: 'rallychart',
+                storeType: 'Rally.data.lookback.SnapshotStore',
+                storeConfig: this._getStoreForReleaseDefect(),
+                calculatorType: 'Rally.example.CFDCalculator',
+                calculatorConfig: {
+                	  stateFieldName: 'Severity',
+                      stateFieldValues: ['P1 - Crash/Data Loss, upgrade/migration fail', 
+                                         'P2 - Major Problem, loss of stability or feature functionality', 
+                                         'P3 - Minor Problem, improves customer experience',
+                                         'P4 - Cosmetic, okay to defer'
+                                         ]
+                },
+                width: 1000,
+                height: 600,
+                chartConfig: this._getopenDefectConfig()
+            };
+    	console.log("release printing");
+    	console.log(this._getStoreConfig());
+    	console.log(this._getStoreConfig().valueOf());
+    	this.chartContainer.add(this.chart);
+    },
+    
+    _getStoreForReleaseDefect: function() {
+        return {
+            find: {
+                _TypeHierarchy: { '$in' : [ 'Defect' ] },
+                Children: null,
+                _ProjectHierarchy: this.getContext().getProject().ObjectID,
+                _ValidFrom: {'$gt': Rally.util.DateTime.toIsoString(Rally.util.DateTime.add(new Date(), 'day', -120)) },
+                State: "Open",
+                Release: "8.1",
+            },
+            fetch: ['Severity','Release'],
+            hydrate: ['Severity','Release'],
+            sort: {
+                _ValidFrom: 1
+            },
+            context: this.getContext().getDataContext(),
+            limit: Infinity
+        };
+    },
  
     
-    /* Load Defect Trernd */
+    /* Load Defect Trend */
     _loadDefectTrend : function() {
     	var store = Ext.create('Ext.data.JsonStore', {
     	    fields: ['name', 'data1', 'data2', 'data3', 'data4', 'data5'],
@@ -220,13 +324,13 @@ Ext.define('CustomApp', {
     
     
     /*
-     * Load chart1 trend
+     * Load openDefect trend
      * */
-    _chart1: function() {
+    _openDefect: function() {
     	this.chart = {
                 xtype: 'rallychart',
                 storeType: 'Rally.data.lookback.SnapshotStore',
-                storeConfig: this._getStoreForChart1(),
+                storeConfig: this._getStoreForopenDefect(),
                 calculatorType: 'Rally.example.CFDCalculator',
                 calculatorConfig: {
 //                    stateFieldName: 'ScheduleState',
@@ -235,11 +339,12 @@ Ext.define('CustomApp', {
                       stateFieldValues: ['P1 - Crash/Data Loss, upgrade/migration fail', 
                                          'P2 - Major Problem, loss of stability or feature functionality', 
                                          'P3 - Minor Problem, improves customer experience',
-                                         'P4 - Cosmetic, okay to defer']
+                                         'P4 - Cosmetic, okay to defer'
+                                         ]
                 },
                 width: 1000,
                 height: 600,
-                chartConfig: this._getChart1Config()
+                chartConfig: this._getopenDefectConfig()
             };
     	console.log("Printing");
     	console.log(this._getStoreConfig());
@@ -247,7 +352,7 @@ Ext.define('CustomApp', {
     	this.chartContainer.add(this.chart);
     },
     
-    _getStoreForChart1: function() {
+    _getStoreForopenDefect: function() {
         return {
             find: {
                 _TypeHierarchy: { '$in' : [ 'Defect' ] },
@@ -259,8 +364,8 @@ Ext.define('CustomApp', {
             },
 //            fetch: ['ScheduleState'],
 //            hydrate: ['ScheduleState'], 
-            fetch: ['Severity'],
-            hydrate: ['Severity'],
+            fetch: ['Severity','Release','Project'],
+            hydrate: ['Severity','Release','Project'],
             sort: {
                 _ValidFrom: 1
             },
@@ -269,14 +374,14 @@ Ext.define('CustomApp', {
         };
     },
     
-    _getChart1Config: function() {
+    _getopenDefectConfig: function() {
     	console.log("starting chart config");
         return {
             chart: {
                 zoomType: 'xy'
             },
             title: {
-                text: 'Project Cumulative Flow'
+                text: 'Open Defects'
             },
             xAxis: {
                 tickmarkPlacement: 'on',
@@ -311,51 +416,89 @@ Ext.define('CustomApp', {
      * Load chart2 trend
      * */
     _chart2: function() {
+    	var projectName = this.getContext().getProject()._refObjectName;
+    	var projectName1 = this.getContext();
+    	console.log("========");
+    	console.log(projectName);
+    	console.log(this.getContext().getProject());
+    	console.log(projectName1);
     	this.chart = {
                 xtype: 'rallychart',
                 storeType: 'Rally.data.lookback.SnapshotStore',
                 storeConfig: this._getStoreForChart2(),
                 calculatorType: 'Rally.example.CFDCalculator',
                 calculatorConfig: {
-//                    stateFieldName: 'ScheduleState',
-//                    stateFieldValues: ['Defined', 'In-Progress', 'Completed', 'Accepted']
-              	  stateFieldName: this.context.getProject().Name,
-                  stateFieldValues: ['BE','FE','VisualRF']
+              	  stateFieldName: this.getContext().getProject(),
+                  stateFieldValues: ['BE','FE']                	
                 },
                 width: 1000,
                 height: 600,
-                chartConfig: this._getChart1Config()
+                chartConfig: this._getChart2Config()
             };
-    	console.log("Printinggg");
-    	console.log(this._getStoreConfig());
     	this.chartContainer.add(this.chart);
     },
     
-    _getStoreForChart2: function() {
-        return {
+    
+    
+    _getStoreForChart2: function() {        
+        var obj1 = {
             find: {
                 _TypeHierarchy: { '$in' : [ 'Defect' ] },
                 Children: null,
                 _ProjectHierarchy: this.getContext().getProject().ObjectID,
-                _ValidFrom: {'$gt': Rally.util.DateTime.toIsoString(Rally.util.DateTime.add(new Date(), 'day', -30)) },
+                _ValidFrom: {'$gt': Rally.util.DateTime.toIsoString(Rally.util.DateTime.add(new Date(), 'day', -120)) },
                 State: "Open",
-                //SubmittedBy: "Customer Support",
             },
-//            fetch: ['ScheduleState'],
-//            hydrate: ['ScheduleState'], 
             fetch: ['Project'],
             hydrate: ['Project'],
             sort: {
                 _ValidFrom: 1
             },
             context: this.getContext().getDataContext(),
-            limit: Infinity
+            limit: Infinity,
+            val: this.Name,
+        };
+        return obj1;
+    },
+    
+    _getChart2Config: function() {
+    	console.log("starting chart config");
+        return {
+            chart: {
+                zoomType: 'xy'
+            },
+            title: {
+                text: 'Chart2'
+            },
+            xAxis: {
+                tickmarkPlacement: 'on',
+                tickInterval: 20,
+                title: {
+                    text: 'Date'
+                }
+            },
+            yAxis: [
+                {
+                    title: {
+                        text: 'Count'
+                    }
+                }
+            ],
+            plotOptions: {
+                series: {
+                    marker: {
+                        enabled: false
+                    }
+                },
+                area: {
+                    stacking: 'normal'
+                }
+            }
         };
     },
     
     
-    
-    /* Load Defect Trernd */
+    /* Load Project Cumulative Flow */
     _loadProjectCumulative : function() {	
     	this.chart = {
                 xtype: 'rallychart',
