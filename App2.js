@@ -32,7 +32,7 @@ Ext.define('CustomApp', {
     		        {"abbr":"DT", "name":"Defect Trend"},  
     		        {"abbr":"PB", "name":"PI Burnup"},  
     		        {"abbr":"PC", "name":"Project Cumulative Flow"},
-    		        {"abbr":"P1", "name":"Open Defects"},
+    		        {"abbr":"82", "name":"8.2 Open Defects"},
     		        {"abbr":"P2", "name":"Project2"},
     		        {"abbr":"SR", "name":"Standard Report"},
     		    ]
@@ -103,9 +103,9 @@ Ext.define('CustomApp', {
     			console.log("Loading project cumulative flows ..");
     			this._loadProjectCumulative();
     			break;
-       		case "P1":
-       			console.log("Loading Open Defects chart");
-       			this._openDefect();
+       		case "82":
+       			console.log("Loading 8.2 Open Defects chart");
+       			this._82openDefect();
        			break;
        		case "P2":
        			console.log("Loading chart2");
@@ -326,15 +326,13 @@ Ext.define('CustomApp', {
     /*
      * Load openDefect trend
      * */
-    _openDefect: function() {
+    _82openDefect: function() {
     	this.chart = {
                 xtype: 'rallychart',
                 storeType: 'Rally.data.lookback.SnapshotStore',
-                storeConfig: this._getStoreForopenDefect(),
+                storeConfig: this._82getStoreForopenDefect(),
                 calculatorType: 'Rally.example.CFDCalculator',
                 calculatorConfig: {
-//                    stateFieldName: 'ScheduleState',
-//                    stateFieldValues: ['Defined', 'In-Progress', 'Completed', 'Accepted']
                 	  stateFieldName: 'Severity',
                       stateFieldValues: ['P1 - Crash/Data Loss, upgrade/migration fail', 
                                          'P2 - Major Problem, loss of stability or feature functionality', 
@@ -344,17 +342,17 @@ Ext.define('CustomApp', {
                 },
                 width: 1000,
                 height: 600,
-                chartConfig: this._getopenDefectConfig()
+                chartConfig: this._82getopenDefectConfig()
             };
-    	console.log("Printing");
-    	console.log(this._getStoreConfig());
-    	console.log(this._getStoreConfig().valueOf());
+//    	console.log("Printing");
+//    	console.log(this._getStoreConfig());
+//    	console.log(this._getStoreConfig().valueOf());
     	this.chartContainer.add(this.chart);
-		console.log("Loading release chartsss");
-		this._releaseContainer();
+//		console.log("Loading release chartsss");
+//		this._releaseContainer();
     },
     
-    _getStoreForopenDefect: function() {
+    _82getStoreForopenDefect: function() {
         return {
             find: {
                 _TypeHierarchy: { '$in' : [ 'Defect' ] },
@@ -362,7 +360,7 @@ Ext.define('CustomApp', {
                 _ProjectHierarchy: this.getContext().getProject().ObjectID,
                 _ValidFrom: {'$gt': Rally.util.DateTime.toIsoString(Rally.util.DateTime.add(new Date(), 'day', -120)) },
                 State: "Open",
-                //Release: 19388025787,
+                Release: 19388025787,
             },
             fetch: ['Severity','Release','Project'],
             hydrate: ['Severity','Release','Project'],
@@ -374,7 +372,7 @@ Ext.define('CustomApp', {
         };
     },
     
-    _getopenDefectConfig: function() {
+    _82getopenDefectConfig: function() {
     	console.log("starting chart config");
         return {
             chart: {
