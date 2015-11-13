@@ -33,6 +33,7 @@ Ext.define('CustomApp', {
     		        {"abbr":"PB", "name":"PI Burnup"},  
     		        {"abbr":"PC", "name":"Project Cumulative Flow"},
     		        {"abbr":"82", "name":"8.2 Open Defects"},
+    		        {"abbr":"81", "name":"8.1 Open Defects"},
     		        {"abbr":"P2", "name":"Project2"},
     		        {"abbr":"SR", "name":"Standard Report"},
     		    ]
