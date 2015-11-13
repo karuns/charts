@@ -362,8 +362,8 @@ Ext.define('CustomApp', {
                 State: "Open",
                 Release: 19388025787,
             },
-            fetch: ['Severity','Release','Project'],
-            hydrate: ['Severity','Release','Project'],
+            fetch: ['Severity','Release','Project','SubmittedBy'],
+            hydrate: ['Severity','Release','Project','SubmittedBy'],
             sort: {
                 _ValidFrom: 1
             },
@@ -490,7 +490,7 @@ Ext.define('CustomApp', {
     },
     
     /*
-     * Load chart2 trend
+     * Load CFD trend
      * */
     _chart2: function() {
     	var projectName = this.getContext().getProject()._refObjectName;
@@ -502,22 +502,28 @@ Ext.define('CustomApp', {
     	this.chart = {
                 xtype: 'rallychart',
                 storeType: 'Rally.data.lookback.SnapshotStore',
-                storeConfig: this._getStoreForChart2(),
+                storeConfig: this._getStoreForCFD(),
                 calculatorType: 'Rally.example.CFDCalculator',
                 calculatorConfig: {
-              	  stateFieldName: this.getContext().getProject(),
-                  stateFieldValues: ['BE','FE']                	
+//              	  stateFieldName: this.getContext().getProject(),
+//                  stateFieldValues: ['BE','FE']       
+              	  stateFieldName: 'Severity',
+                  stateFieldValues: ['P1 - Crash/Data Loss, upgrade/migration fail', 
+                                     'P2 - Major Problem, loss of stability or feature functionality', 
+                                     'P3 - Minor Problem, improves customer experience',
+                                     'P4 - Cosmetic, okay to defer'
+                                     ]
                 },
                 width: 1000,
                 height: 600,
-                chartConfig: this._getChart2Config()
+                chartConfig: this._getCFDConfig()
             };
     	this.chartContainer.add(this.chart);
     },
     
     
     
-    _getStoreForChart2: function() {        
+    _getStoreForCFD: function() {        
         var obj1 = {
             find: {
                 _TypeHierarchy: { '$in' : [ 'Defect' ] },
@@ -525,6 +531,7 @@ Ext.define('CustomApp', {
                 _ProjectHierarchy: this.getContext().getProject().ObjectID,
                 _ValidFrom: {'$gt': Rally.util.DateTime.toIsoString(Rally.util.DateTime.add(new Date(), 'day', -120)) },
                 State: "Open",
+                //SubmittedBy: 
             },
             fetch: ['Project'],
             hydrate: ['Project'],
@@ -538,14 +545,14 @@ Ext.define('CustomApp', {
         return obj1;
     },
     
-    _getChart2Config: function() {
-    	console.log("starting chart config");
+    _getCFDConfig: function() {
+    	console.log("starting CFD chart");
         return {
             chart: {
                 zoomType: 'xy'
             },
             title: {
-                text: 'Chart2'
+                text: 'Customer found Defects'
             },
             xAxis: {
                 tickmarkPlacement: 'on',
