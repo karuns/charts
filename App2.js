@@ -107,6 +107,10 @@ Ext.define('CustomApp', {
        			console.log("Loading 8.2 Open Defects chart");
        			this._82openDefect();
        			break;
+       		case "81":
+       			console.log("Loading 8.1 Open Defects chart");
+       			this.();
+       			break;
        		case "P2":
        			console.log("Loading chart2");
        			this._chart2();
@@ -324,7 +328,7 @@ Ext.define('CustomApp', {
     
     
     /*
-     * Load openDefect trend
+     * Load 8.2 open Defect trend
      * */
     _82openDefect: function() {
     	this.chart = {
@@ -344,12 +348,7 @@ Ext.define('CustomApp', {
                 height: 600,
                 chartConfig: this._82getopenDefectConfig()
             };
-//    	console.log("Printing");
-//    	console.log(this._getStoreConfig());
-//    	console.log(this._getStoreConfig().valueOf());
     	this.chartContainer.add(this.chart);
-//		console.log("Loading release chartsss");
-//		this._releaseContainer();
     },
     
     _82getStoreForopenDefect: function() {
@@ -373,13 +372,13 @@ Ext.define('CustomApp', {
     },
     
     _82getopenDefectConfig: function() {
-    	console.log("starting chart config");
+    	console.log("starting 8.2 open defect chart");
         return {
             chart: {
                 zoomType: 'xy'
             },
             title: {
-                text: 'Open Defects'
+                text: '8.2 Open Defects'
             },
             xAxis: {
                 tickmarkPlacement: 'on',
@@ -409,6 +408,85 @@ Ext.define('CustomApp', {
     },
     
     
+    /*
+     * Load 8.1 openDefect trend
+     * */
+    _81openDefect: function() {
+    	this.chart = {
+                xtype: 'rallychart',
+                storeType: 'Rally.data.lookback.SnapshotStore',
+                storeConfig: this._81getStoreForopenDefect(),
+                calculatorType: 'Rally.example.CFDCalculator',
+                calculatorConfig: {
+                	  stateFieldName: 'Severity',
+                      stateFieldValues: ['P1 - Crash/Data Loss, upgrade/migration fail', 
+                                         'P2 - Major Problem, loss of stability or feature functionality', 
+                                         'P3 - Minor Problem, improves customer experience',
+                                         'P4 - Cosmetic, okay to defer'
+                                         ]
+                },
+                width: 1000,
+                height: 600,
+                chartConfig: this._81getopenDefectConfig()
+            };
+    	this.chartContainer.add(this.chart);
+    },
+    
+    _81getStoreForopenDefect: function() {
+        return {
+            find: {
+                _TypeHierarchy: { '$in' : [ 'Defect' ] },
+                Children: null,
+                _ProjectHierarchy: this.getContext().getProject().ObjectID,
+                _ValidFrom: {'$gt': Rally.util.DateTime.toIsoString(Rally.util.DateTime.add(new Date(), 'day', -120)) },
+                State: "Open",
+                Release: 18206829517,
+            },
+            fetch: ['Severity','Release','Project'],
+            hydrate: ['Severity','Release','Project'],
+            sort: {
+                _ValidFrom: 1
+            },
+            context: this.getContext().getDataContext(),
+            limit: Infinity
+        };
+    },
+    
+    _81getopenDefectConfig: function() {
+    	console.log("starting 8.1 open defect chart");
+        return {
+            chart: {
+                zoomType: 'xy'
+            },
+            title: {
+                text: '8.1 Open Defects'
+            },
+            xAxis: {
+                tickmarkPlacement: 'on',
+                tickInterval: 20,
+                title: {
+                    text: 'Date'
+                }
+            },
+            yAxis: [
+                {
+                    title: {
+                        text: 'Count'
+                    }
+                }
+            ],
+            plotOptions: {
+                series: {
+                    marker: {
+                        enabled: false
+                    }
+                },
+                area: {
+                    stacking: 'normal'
+                }
+            }
+        };
+    },
     
     /*
      * Load chart2 trend
