@@ -361,6 +361,7 @@ Ext.define('CustomApp', {
                 _ValidFrom: {'$gt': Rally.util.DateTime.toIsoString(Rally.util.DateTime.add(new Date(), 'day', -120)) },
                 State: "Open",
                 Release: 19388025787,
+                Severity: "P1 - Crash/Data Loss, upgrade/migration fail",
             },
             fetch: ['Severity','Release','Project','SubmittedBy'],
             hydrate: ['Severity','Release','Project','SubmittedBy'],
