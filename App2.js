@@ -213,7 +213,7 @@ Ext.define('CustomApp', {
                 _ProjectHierarchy: this.getContext().getProject().ObjectID,
                 _ValidFrom: {'$gt': Rally.util.DateTime.toIsoString(Rally.util.DateTime.add(new Date(), 'day', -120)) },
                 State: "Open",
-                Release: "8.1",
+                //Release: "8.1",
             },
             fetch: ['Severity','Release'],
             hydrate: ['Severity','Release'],
@@ -362,7 +362,7 @@ Ext.define('CustomApp', {
                 _ProjectHierarchy: this.getContext().getProject().ObjectID,
                 _ValidFrom: {'$gt': Rally.util.DateTime.toIsoString(Rally.util.DateTime.add(new Date(), 'day', -120)) },
                 State: "Open",
-                //Release: "8.0"
+                Release: 19388025787,
             },
             fetch: ['Severity','Release','Project'],
             hydrate: ['Severity','Release','Project'],
