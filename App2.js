@@ -109,7 +109,7 @@ Ext.define('CustomApp', {
        			break;
        		case "81":
        			console.log("Loading 8.1 Open Defects chart");
-       			this.();
+       			this._81openDefect();
        			break;
        		case "P2":
        			console.log("Loading chart2");
