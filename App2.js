@@ -535,8 +535,8 @@ Ext.define('CustomApp', {
                 State: "Open",
                 SubmittedBy: 31816675,
             },
-            fetch: ['Severity','Release','Project'],
-            hydrate: ['Severity','Release','Project'],
+            fetch: ['Severity','Release','Project','SubmittedBy','Name'],
+            hydrate: ['Severity','Release','Project','SubmittedBy','Name'],
             sort: {
                 _ValidFrom: 1
             },
