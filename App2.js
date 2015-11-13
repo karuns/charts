@@ -34,7 +34,7 @@ Ext.define('CustomApp', {
     		        {"abbr":"PC", "name":"Project Cumulative Flow"},
     		        {"abbr":"82", "name":"8.2 Open Defects"},
     		        {"abbr":"81", "name":"8.1 Open Defects"},
-    		        {"abbr":"P2", "name":"Project2"},
+    		        {"abbr":"CF", "name":"CFD defects"},
     		        {"abbr":"SR", "name":"Standard Report"},
     		    ]
     	});
@@ -112,9 +112,9 @@ Ext.define('CustomApp', {
        			console.log("Loading 8.1 Open Defects chart");
        			this._81openDefect();
        			break;
-       		case "P2":
-       			console.log("Loading chart2");
-       			this._chart2();
+       		case "CF":
+       			console.log("Loading CFD Chart");
+       			this._cfdChart();
        			break;
        		case "SR":
        			console.log("Loading the Standard Report");
@@ -359,9 +359,10 @@ Ext.define('CustomApp', {
                 Children: null,
                 _ProjectHierarchy: this.getContext().getProject().ObjectID,
                 _ValidFrom: {'$gt': Rally.util.DateTime.toIsoString(Rally.util.DateTime.add(new Date(), 'day', -120)) },
-                //State: "Open",
-                //Release: 19388025787,
-                //Severity: "P1 - Crash/Data Loss, upgrade/migration fail",
+                State: "Open",
+                //Release: 19388025787 is for 8.2
+                Release: 19388025787,
+                Severity: "P1 - Crash/Data Loss, upgrade/migration fail",
             },
             fetch: ['Severity','Release','Project','SubmittedBy','Name'],
             hydrate: ['Severity','Release','Project','SubmittedBy','Name'],
@@ -493,7 +494,7 @@ Ext.define('CustomApp', {
     /*
      * Load CFD trend
      * */
-    _chart2: function() {
+    _cfdChart: function() {
     	var projectName = this.getContext().getProject()._refObjectName;
     	var projectName1 = this.getContext();
     	console.log("========");
@@ -532,10 +533,10 @@ Ext.define('CustomApp', {
                 _ProjectHierarchy: this.getContext().getProject().ObjectID,
                 _ValidFrom: {'$gt': Rally.util.DateTime.toIsoString(Rally.util.DateTime.add(new Date(), 'day', -120)) },
                 State: "Open",
-                //SubmittedBy: 
+                SubmittedBy: 31816675,
             },
-            fetch: ['Project'],
-            hydrate: ['Project'],
+            fetch: ['Severity','Release','Project'],
+            hydrate: ['Severity','Release','Project'],
             sort: {
                 _ValidFrom: 1
             },
