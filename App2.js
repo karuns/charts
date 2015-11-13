@@ -363,8 +363,8 @@ Ext.define('CustomApp', {
                 Release: 19388025787,
                 Severity: "P1 - Crash/Data Loss, upgrade/migration fail",
             },
-            fetch: ['Severity','Release','Project','SubmittedBy'],
-            hydrate: ['Severity','Release','Project','SubmittedBy'],
+            fetch: ['Severity','Release','Project','SubmittedBy','Name'],
+            hydrate: ['Severity','Release','Project','SubmittedBy','Name'],
             sort: {
                 _ValidFrom: 1
             },
