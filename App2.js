@@ -158,7 +158,7 @@ Ext.define('CustomApp', {
     	});
     	//console.log(this.relContainer.getValue());
     	this.chartContainer.add(this.relContainer);
-    	console.log(this.relContainer.getRecord().get('Name'));
+//    	console.log(this.relContainer.getRecord().get('Name'));
     	
     },
     
