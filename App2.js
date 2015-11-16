@@ -362,7 +362,7 @@ Ext.define('CustomApp', {
                 State: "Open",
                 //Release: 19388025787 is for 8.2
                 Release: 19388025787,
-                Severity: "P1 - Crash/Data Loss, upgrade/migration fail",
+                //Severity: "P1 - Crash/Data Loss, upgrade/migration fail",
             },
             fetch: ['Severity','Release','Project','SubmittedBy','Name'],
             hydrate: ['Severity','Release','Project','SubmittedBy','Name'],
@@ -510,7 +510,7 @@ Ext.define('CustomApp', {
 //              	  stateFieldName: this.getContext().getProject(),
 //                  stateFieldValues: ['BE','FE']       
               	  stateFieldName: 'Severity',
-                  stateFieldValues: ['P1 - Crash/Data Loss, upgrade/migration fail', 
+                  stateFieldValues: ['P1 - Crash/Data Loss, upgrade/migration fail',
                                      'P2 - Major Problem, loss of stability or feature functionality', 
                                      'P3 - Minor Problem, improves customer experience',
                                      'P4 - Cosmetic, okay to defer'
@@ -533,6 +533,7 @@ Ext.define('CustomApp', {
                 _ProjectHierarchy: this.getContext().getProject().ObjectID,
                 _ValidFrom: {'$gt': Rally.util.DateTime.toIsoString(Rally.util.DateTime.add(new Date(), 'day', -120)) },
                 State: "Open",
+                // SubmittedBy: 31816675 is for "Customer found" defect
                 SubmittedBy: 31816675,
             },
             fetch: ['Severity','Release','Project','SubmittedBy','Name'],
@@ -554,7 +555,7 @@ Ext.define('CustomApp', {
                 zoomType: 'xy'
             },
             title: {
-                text: 'Customer found Defects'
+                text: 'Open Customer found Defects'
             },
             xAxis: {
                 tickmarkPlacement: 'on',
