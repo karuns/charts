@@ -150,13 +150,13 @@ Ext.define('CustomApp', {
             xtype: 'rallyreleasecombobox',
         }],
 //        renderTo: Ext.getBody().dom,
-//	    listeners: {
-//            ready: this._loadReleaseChart(this.relContainer.getValue()),
-//           select: this._loadReleaseChart("8.1"),
-//            scope: this
-//        }
+	    listeners: function(releasecombobox) {
+            ready: this._loadReleaseChart(this.relContainer.getValue());
+           select: this._loadReleaseChart("8.1");
+            scope: this
+        }     
     	});
-    	//console.log(this.relContainer.getValue());
+    	console.log(this.relContainer.getValue());
     	this.chartContainer.add(this.relContainer);
 //    	console.log(this.relContainer.getRecord().get('Name'));
     	
