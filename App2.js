@@ -350,6 +350,7 @@ Ext.define('CustomApp', {
                 chartConfig: this._82getopenDefectConfig()
             };
     	this.chartContainer.add(this.chart);
+    	this._releaseContainer();
     },
     
     _82getStoreForopenDefect: function() {
