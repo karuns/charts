@@ -180,11 +180,16 @@ Ext.define('CustomApp', {
     	this.relContainer = Ext.create('Ext.Container', {
         items: [{
             xtype: 'rallyreleasecombobox',
+            autoLoad: true,
         }],
-	    listeners: function(releasecombobox) {
-            ready: this._loadReleaseChart(this.relContainer.getValue());
-           select: this._loadReleaseChart("8.1");
-            scope: this
+	    listeners: {
+	    	read: function(releasecombobox) {
+	    		this._onUserSelected(combobox.getRecord());
+	    	},
+	    	select: function(releasecombobox) {
+	    		this._onUserSelected(combobox.getRecord());
+	    	},
+	    	scope: this
         }     
     	});
     	//console.log(this.relContainer.getValue());
@@ -192,6 +197,7 @@ Ext.define('CustomApp', {
 //    	console.log(this.relContainer.getRecord().get('Name'));
     	
     },
+      
     
     /* Release based Charts */
     _loadReleaseChart : function(release) {    
