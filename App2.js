@@ -181,7 +181,6 @@ Ext.define('CustomApp', {
         items: [{
             xtype: 'rallyreleasecombobox',
         }],
-//        renderTo: Ext.getBody().dom,
 	    listeners: function(releasecombobox) {
             ready: this._loadReleaseChart(this.relContainer.getValue());
            select: this._loadReleaseChart("8.1");
