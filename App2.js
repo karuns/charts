@@ -1,6 +1,7 @@
 
 Ext.define('CustomApp', {
     extend: 'Rally.app.App',      // The parent class manages the app 'lifecycle' and calls launch() when ready
+    extend: 'Rally.app.TimeboxScopedApp',
     componentCls: 'app',          // CSS styles found in app.css
     requires: ['Rally.example.CFDCalculator'],
     // Entry Point to App
