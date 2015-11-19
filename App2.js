@@ -34,7 +34,8 @@ Ext.define('CustomApp', {
     		        {"abbr":"PC", "name":"Project Cumulative Flow"},
     		        {"abbr":"82", "name":"8.2 Open Defects"},
     		        {"abbr":"81", "name":"8.1 Open Defects"},
-    		        {"abbr":"CF", "name":"CFD defects"},
+    		        {"abbr":"82CF", "name":"8.2 CFD defects"},
+    		        {"abbr":"81CF", "name":"8.1 CFD defects"},
     		        {"abbr":"SR", "name":"Standard Report"},
     		    ]
     	});
@@ -112,9 +113,13 @@ Ext.define('CustomApp', {
        			console.log("Loading 8.1 Open Defects chart");
        			this._81openDefect();
        			break;
-       		case "CF":
-       			console.log("Loading CFD Chart");
-       			this._cfdChart();
+       		case "82CF":
+       			console.log("Loading 8.2 CFD Chart");
+       			this._82cfdChart();
+       			break;
+       		case "81CF":
+       			console.log("Loading 8.1 CFD Chart");
+       			this._81cfdChart();
        			break;
        		case "SR":
        			console.log("Loading the Standard Report");
