@@ -531,9 +531,9 @@ Ext.define('CustomApp', {
     },
     
     /*
-     * Load CFD trend
+     * Load 8.2 CFD trend
      * */
-    _cfdChart: function() {
+    _82cfdChart: function() {
     	var projectName = this.getContext().getProject()._refObjectName;
     	var projectName1 = this.getContext();
     	console.log("========");
@@ -543,7 +543,7 @@ Ext.define('CustomApp', {
     	this.chart = {
                 xtype: 'rallychart',
                 storeType: 'Rally.data.lookback.SnapshotStore',
-                storeConfig: this._getStoreForCFD(),
+                storeConfig: this._82getStoreForCFD(),
                 calculatorType: 'Rally.example.CFDCalculator',
                 calculatorConfig: {
 //              	  stateFieldName: this.getContext().getProject(),
@@ -557,14 +557,14 @@ Ext.define('CustomApp', {
                 },
                 width: 1000,
                 height: 600,
-                chartConfig: this._getCFDConfig()
+                chartConfig: this._82getCFDConfig()
             };
     	this.chartContainer.add(this.chart);
     },
     
     
     
-    _getStoreForCFD: function() {        
+    _82getStoreForCFD: function() {        
         var obj1 = {
             find: {
                 _TypeHierarchy: { '$in' : [ 'Defect' ] },
@@ -591,7 +591,7 @@ Ext.define('CustomApp', {
         return obj1;
     },
     
-    _getCFDConfig: function() {
+    _82getCFDConfig: function() {
     	console.log("starting CFD chart");
         return {
             chart: {
@@ -627,6 +627,101 @@ Ext.define('CustomApp', {
         };
     },
     
+    
+    /*
+     * Load 8.1 CFD trend
+     * */
+    _81cfdChart: function() {
+    	var projectName = this.getContext().getProject()._refObjectName;
+    	var projectName1 = this.getContext();
+    	console.log("========");
+    	console.log(projectName);
+    	console.log(this.getContext().getProject());
+    	console.log(projectName1);
+    	this.chart = {
+                xtype: 'rallychart',
+                storeType: 'Rally.data.lookback.SnapshotStore',
+                storeConfig: this._81getStoreForCFD(),
+                calculatorType: 'Rally.example.CFDCalculator',
+                calculatorConfig: {
+//              	  stateFieldName: this.getContext().getProject(),
+//                  stateFieldValues: ['BE','FE']       
+              	  stateFieldName: 'Severity',
+                  stateFieldValues: ['P1 - Crash/Data Loss, upgrade/migration fail',
+                                     'P2 - Major Problem, loss of stability or feature functionality', 
+                                     'P3 - Minor Problem, improves customer experience',
+                                     'P4 - Cosmetic, okay to defer'
+                                     ]
+                },
+                width: 1000,
+                height: 600,
+                chartConfig: this._81getCFDConfig()
+            };
+    	this.chartContainer.add(this.chart);
+    },
+    
+    
+    
+    _81getStoreForCFD: function() {        
+        var obj1 = {
+            find: {
+                _TypeHierarchy: { '$in' : [ 'Defect' ] },
+                Children: null,
+                _ProjectHierarchy: this.getContext().getProject().ObjectID,
+                _ValidFrom: {'$gt': Rally.util.DateTime.toIsoString(Rally.util.DateTime.add(new Date(), 'day', -120)) },
+                State: "Open",
+                // SubmittedBy: 31816675 is for "Customer found" defect
+                SubmittedBy: 31816675,
+                //for 8.1
+                Release: 18206829517,
+            },
+            fetch: ['Severity','Release','Project','SubmittedBy','Name'],
+            hydrate: ['Severity','Release','Project','SubmittedBy','Name'],
+            sort: {
+                _ValidFrom: 1
+            },
+            context: this.getContext().getDataContext(),
+            limit: Infinity,
+            val: this.Name,
+        };
+        return obj1;
+    },
+    
+    _81getCFDConfig: function() {
+    	console.log("starting CFD chart");
+        return {
+            chart: {
+                zoomType: 'xy'
+            },
+            title: {
+                text: 'Open Customer found Defects'
+            },
+            xAxis: {
+                tickmarkPlacement: 'on',
+                tickInterval: 20,
+                title: {
+                    text: 'Date'
+                }
+            },
+            yAxis: [
+                {
+                    title: {
+                        text: 'Count'
+                    }
+                }
+            ],
+            plotOptions: {
+                series: {
+                    marker: {
+                        enabled: false
+                    }
+                },
+                area: {
+                    stacking: 'normal'
+                }
+            }
+        };
+    },
     
     /* Load Project Cumulative Flow */
     _loadProjectCumulative : function() {	
