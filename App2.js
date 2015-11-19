@@ -576,6 +576,8 @@ Ext.define('CustomApp', {
                 SubmittedBy: 31816675,
               //Release: 19388025787 is for 8.2
                 Release: 19388025787,
+                //for 8.1
+                //Release: 18206829517,
             },
             fetch: ['Severity','Release','Project','SubmittedBy','Name'],
             hydrate: ['Severity','Release','Project','SubmittedBy','Name'],
