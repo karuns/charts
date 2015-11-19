@@ -574,6 +574,8 @@ Ext.define('CustomApp', {
                 State: "Open",
                 // SubmittedBy: 31816675 is for "Customer found" defect
                 SubmittedBy: 31816675,
+                //for 8.1
+                Release: 18206829517,
             },
             fetch: ['Severity','Release','Project','SubmittedBy','Name'],
             hydrate: ['Severity','Release','Project','SubmittedBy','Name'],
