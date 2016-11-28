@@ -31,7 +31,7 @@ Ext.define('CustomApp', {
     		        {"abbr":"BC", "name":"Burndown Chart"},
     		        {"abbr":"DT", "name":"Defect Trend"},  
     		        {"abbr":"PB", "name":"PI Burnup"},  
-    		        {"abbr":"PC", "name":"Project Cumulative Flow"},  
+    		        {"abbr":"PC", "name":"Project Cumulative Flow"}, 
     		    ]
     	});
     	
